@@ -3,6 +3,7 @@ package sender
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/goferwplynie/airQuality/client/internal/models"
@@ -23,6 +24,7 @@ func Send(data models.ResponseModel) error {
 	readings := prepareData(data)
 
 	json, err := json.Marshal(readings)
+	fmt.Println(string(json))
 	if err != nil {
 		return err
 	}
