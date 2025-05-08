@@ -8,6 +8,6 @@ type ResponseModel struct {
 }
 
 type Reading struct {
-	Timestamp string
-	Pm10      float64
+	Timestamp string  `json:"timestamp,omitempty"`
+	Pm10      float64 `json:"pm10,omitempty"`
 }
