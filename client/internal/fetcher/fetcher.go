@@ -9,7 +9,7 @@ import (
 )
 
 func Fetch(latitude, longtitude float64) (models.ResponseModel, error) {
-	url := fmt.Sprintf("https://air-quality-api.open-meteo.com/v1/air-quality?latitude=%v&longitude=%v&hourly=pm10", latitude, longtitude)
+	url := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%v&longitude=%v&hourly=temperature_2m,surface_pressure,relative_humidity_2m", latitude, longtitude)
 	resp, err := http.Get(url)
 
 	var model models.ResponseModel

@@ -3,7 +3,6 @@ package sender
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/goferwplynie/airQuality/client/internal/models"
@@ -13,8 +12,10 @@ func prepareData(data models.ResponseModel) []models.Reading {
 	readings := make([]models.Reading, 0, len(data.Hourly.Time))
 	for i := range len(data.Hourly.Time) {
 		readings = append(readings, models.Reading{
-			Timestamp: data.Hourly.Time[i],
-			Pm10:      data.Hourly.Pm10[i],
+			Timestamp:   data.Hourly.Time[i],
+			Temperature: data.Hourly.Temperature[i],
+			Pressure:    data.Hourly.Pressure[i],
+			Humidity:    data.Hourly.Humidity[i],
 		})
 	}
 	return readings
@@ -24,7 +25,6 @@ func Send(data models.ResponseModel) error {
 	readings := prepareData(data)
 
 	json, err := json.Marshal(readings)
-	fmt.Println(string(json))
 	if err != nil {
 		return err
 	}
