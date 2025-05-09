@@ -27,6 +27,7 @@ func (h *Handler) SaveReadingHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "cant read request body",
 		})
+		return
 	}
 
 	errors := h.BLayer.SaveReadings(request)
@@ -35,9 +36,25 @@ func (h *Handler) SaveReadingHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": errors,
 		})
-		fmt.Println(errors)
+		return
 	} else {
 		ctx.Status(http.StatusCreated)
 		fmt.Println("success")
 	}
+}
+
+func (h *Handler) GetReading(ctx *gin.Context) {
+	timestamp := ctx.Param("timestamp")
+
+	reading, err := h.BLayer.GetReading(timestamp)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"reading": reading,
+	})
+
 }

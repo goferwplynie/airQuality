@@ -17,6 +17,7 @@ func main() {
 	router := gin.New()
 
 	router.POST("readings", handler.SaveReadingHandler)
+	router.GET("readings/:timestamp", handler.GetReading)
 
 	err := router.Run(":8080")
 	if err != nil {

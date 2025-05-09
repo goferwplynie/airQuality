@@ -1,6 +1,7 @@
 package services
 
 import (
+	"math"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -65,13 +66,10 @@ func (b *BuisnessLayer) GetReading(timestamp string) (models.Reading, error) {
 
 func getClosestReading(readings []models.Reading, target time.Time) models.Reading {
 	var closest models.Reading
-	closestDiff := time.Duration(10000000)
+	closestDiff := time.Duration(math.MaxInt64)
 
 	for _, r := range readings {
-		diff := r.Time.Sub(target)
-		if diff < 0 {
-			diff = -diff
-		}
+		diff := r.Time.Sub(target).Abs()
 		if diff < closestDiff {
 			closestDiff = diff
 			closest = r
