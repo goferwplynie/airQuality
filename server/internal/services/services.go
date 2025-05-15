@@ -2,6 +2,7 @@ package services
 
 import (
 	"math"
+	"slices"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -31,15 +32,16 @@ func (b *BuisnessLayer) SaveReadings(readings []models.PostReading) []error {
 		err := validate.Struct(v)
 		if err == nil {
 			convertedTime, err := convertTimestamp(v.Timestamp)
+			reading := models.Reading{
+				Time:        convertedTime,
+				Temperature: v.Temperature,
+				Pressure:    v.Pressure,
+				Humidity:    v.Humidity,
+			}
 			if err != nil {
 				errors = append(errors, err)
-			} else {
-				b.repo.SaveReading(models.Reading{
-					Time:        convertedTime,
-					Temperature: v.Temperature,
-					Pressure:    v.Pressure,
-					Humidity:    v.Humidity,
-				})
+			} else if !slices.Contains(b.repo.GetAll(), reading) {
+				b.repo.SaveReading(reading)
 			}
 
 		} else {
